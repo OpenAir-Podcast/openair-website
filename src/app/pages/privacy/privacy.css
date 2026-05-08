@@ -1,0 +1,36 @@
+.page-header {
+  text-align: center;
+  padding-bottom: 0;
+}
+
+.page-header .section-subtitle {
+  margin: 0 auto;
+}
+
+.privacy-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.privacy-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 48px;
+  margin-bottom: 16px;
+}
+
+.privacy-content h2:first-child {
+  margin-top: 0;
+}
+
+.privacy-content p {
+  font-size: 1.0625rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.privacy-date {
+  margin-top: 48px;
+  color: var(--text-muted);
+}

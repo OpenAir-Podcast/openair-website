@@ -1,0 +1,28 @@
+<header>
+  <div class="container header-inner">
+    <a routerLink="/" class="logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="14" stroke="url(#logoGrad)" stroke-width="2.5"/>
+        <path d="M12 10v12M20 10v12M16 8v16" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="logoGrad" x1="2" y1="2" x2="30" y2="30">
+            <stop stop-color="#6C63FF"/>
+            <stop offset="1" stop-color="#FF6584"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>OpenAir</span>
+    </a>
+    <nav class="nav-links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+      <a routerLink="/about" routerLinkActive="active">About</a>
+      <a routerLink="/download" routerLinkActive="active">Download</a>
+      <a routerLink="/blog" routerLinkActive="active">Blog</a>
+      <a routerLink="/contribute" routerLinkActive="active">Contribute</a>
+      <a routerLink="/documentation" routerLinkActive="active">Docs</a>
+    </nav>
+    <div class="header-actions">
+      <a routerLink="/download" class="btn btn-primary">Get OpenAir</a>
+    </div>
+  </div>
+</header>

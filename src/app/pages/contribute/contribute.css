@@ -1,0 +1,71 @@
+.page-header {
+  text-align: center;
+  padding-bottom: 0;
+}
+
+.page-header .section-subtitle {
+  margin: 0 auto;
+}
+
+.contribute-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.contribute-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  transition: all var(--transition);
+}
+
+.contribute-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--primary);
+  transform: translateY(-4px);
+}
+
+.contrib-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(108, 99, 255, 0.1);
+  border-radius: 14px;
+  margin-bottom: 20px;
+  color: var(--primary-light);
+}
+
+.contribute-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.contribute-card p {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.contrib-link {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--primary-light);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.contrib-link:hover {
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .contribute-grid {
+    grid-template-columns: 1fr;
+  }
+}
