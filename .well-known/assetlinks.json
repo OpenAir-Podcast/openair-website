@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.liquidhive.openair",
+      "sha256_cert_fingerprints": [
+        "F1:64:64:38:EB:DE:D2:5C:71:A8:7E:F0:09:96:FF:F4:06:A1:E1:5F:63:48:85:C8:0E:2C:B9:76:EC:4A:AF:3D"
+      ]
+    }
+  }
+]
