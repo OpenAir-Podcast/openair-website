@@ -1,59 +1,33 @@
-# OpenairWebsite
+# OpenAir Website
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.7.
+This is the official website for [OpenAir](https://github.com/OpenAir-Podcast/OpenAir), a free, open-source, cross-platform podcast player.
 
-## Development server
+Built with [Angular 21](https://angular.dev/). Serves as the public-facing site with download links, documentation, blog, privacy policy, and contribution guides.
 
-To start a local development server, run:
+## Development
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/`. The app auto-reloads on source changes.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Build
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Build artifacts go to `dist/`. Production builds are optimized for performance.
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Test
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+Unit tests run via [Vitest](https://vitest.dev/).
 
-For end-to-end (e2e) testing, run:
+## Deploy
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Pushes to `main` automatically build and deploy to GitHub Pages via GitHub Actions.
