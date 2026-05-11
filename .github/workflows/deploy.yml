@@ -27,7 +27,7 @@ jobs:
 
       - run: npm ci
 
-      - run: ng build --base-href /openair-website/
+      - run: npx ng build --base-href /openair-website/
 
       - run: npx angular-cli-ghpages --dir=dist/openair-website/browser --no-silent
         env:
