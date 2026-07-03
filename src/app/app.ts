@@ -23,7 +23,6 @@ export class App implements OnInit {
     const params = new URLSearchParams(hash);
     const type = params.get('type');
     const accessToken = params.get('access_token');
-    const refreshToken = params.get('refresh_token');
     const error = params.get('error');
     const errorDescription = params.get('error_description');
 
@@ -34,22 +33,8 @@ export class App implements OnInit {
       return;
     }
 
-    if (type !== 'recovery' || !accessToken) return;
-
-    window.location.hash = '';
-    this.supabase.client.auth
-      .setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken || accessToken,
-      })
-      .then(({ error }) => {
-        if (error) {
-          this.router.navigate(['/verify-recovery'], {
-            queryParams: { error: error.message },
-          });
-        } else {
-          this.router.navigate(['/verify-recovery']);
-        }
-      });
+    if (type === 'recovery' && accessToken) {
+      this.router.navigate(['/verify-recovery']);
+    }
   }
 }
