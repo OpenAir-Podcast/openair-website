@@ -29,17 +29,22 @@ export class VerifyRecovery implements OnInit {
         this.sessionSet = true;
         return;
       }
-      this.processHash();
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        this.processHash(hash);
+        return;
+      }
+      const queryToken = new URLSearchParams(window.location.search).get('token');
+      const queryEmail = new URLSearchParams(window.location.search).get('email');
+      if (queryToken && queryEmail) {
+        this.processToken(queryToken, queryEmail);
+        return;
+      }
+      this.error = 'No recovery session found. Please request a new password reset link.';
     });
   }
 
-  private processHash() {
-    const hash = window.location.hash.substring(1);
-    if (!hash) {
-      this.error = 'No recovery session found. Please request a new password reset link.';
-      return;
-    }
-
+  private processHash(hash: string) {
     const params = new URLSearchParams(hash);
     const type = params.get('type');
     const accessToken = params.get('access_token');
@@ -65,6 +70,22 @@ export class VerifyRecovery implements OnInit {
           window.location.hash = '';
         }
       });
+  }
+
+  private async processToken(token: string, email: string) {
+    this.loading = true;
+    const { error } = await this.supabase.client.auth.verifyOtp({
+      email,
+      token,
+      type: 'recovery',
+    });
+    this.loading = false;
+    if (error) {
+      this.error = error.message;
+    } else {
+      this.sessionSet = true;
+      window.history.replaceState({}, '', '/verify-recovery');
+    }
   }
 
   async onSubmit() {
