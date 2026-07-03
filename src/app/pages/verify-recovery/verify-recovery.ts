@@ -45,7 +45,9 @@ export class VerifyRecovery implements OnInit {
       return;
     }
 
+    this.loading = true;
     this.supabase.client.auth.getSession().then(({ data: { session } }) => {
+      this.loading = false;
       if (session) {
         this.sessionSet = true;
       } else {

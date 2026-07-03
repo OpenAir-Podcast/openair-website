@@ -24,6 +24,15 @@ export class App implements OnInit {
     const type = params.get('type');
     const accessToken = params.get('access_token');
     const refreshToken = params.get('refresh_token');
+    const error = params.get('error');
+    const errorDescription = params.get('error_description');
+
+    if (error) {
+      this.router.navigate(['/verify-recovery'], {
+        queryParams: { error: errorDescription || error },
+      });
+      return;
+    }
 
     if (type !== 'recovery' || !accessToken) return;
 
