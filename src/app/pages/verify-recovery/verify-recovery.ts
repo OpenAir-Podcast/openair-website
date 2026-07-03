@@ -24,23 +24,25 @@ export class VerifyRecovery implements OnInit {
   });
 
   ngOnInit() {
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+      this.processHash(hash);
+      return;
+    }
+
+    const queryToken = new URLSearchParams(window.location.search).get('token');
+    const queryEmail = new URLSearchParams(window.location.search).get('email');
+    if (queryToken && queryEmail) {
+      this.processToken(queryToken, queryEmail);
+      return;
+    }
+
     this.supabase.client.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         this.sessionSet = true;
-        return;
+      } else {
+        this.error = 'No recovery session found. Please request a new password reset link.';
       }
-      const hash = window.location.hash.substring(1);
-      if (hash) {
-        this.processHash(hash);
-        return;
-      }
-      const queryToken = new URLSearchParams(window.location.search).get('token');
-      const queryEmail = new URLSearchParams(window.location.search).get('email');
-      if (queryToken && queryEmail) {
-        this.processToken(queryToken, queryEmail);
-        return;
-      }
-      this.error = 'No recovery session found. Please request a new password reset link.';
     });
   }
 
