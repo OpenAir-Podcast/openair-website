@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,9 +29,20 @@ jobs:
 
       - run: npx ng build --base-href /openair-website/
 
-      - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          npx angular-cli-ghpages --dir=dist/openair-website/browser --no-silent
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: cp dist/openair-website/browser/index.html dist/openair-website/browser/404.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/openair-website/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
