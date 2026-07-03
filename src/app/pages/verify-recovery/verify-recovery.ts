@@ -67,18 +67,17 @@ export class VerifyRecovery implements OnInit {
       return;
     }
 
-    this.loading = true;
+    this.sessionSet = true;
     this.supabase.client.auth
       .setSession({
         access_token: accessToken,
         refresh_token: refreshToken || accessToken,
       })
       .then(({ error }) => {
-        this.loading = false;
         if (error) {
+          this.sessionSet = false;
           this.error = 'Invalid or expired recovery link. Please request a new one.';
         } else {
-          this.sessionSet = true;
           window.location.hash = '';
         }
       });
