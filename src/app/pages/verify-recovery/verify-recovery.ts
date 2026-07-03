@@ -76,12 +76,14 @@ export class VerifyRecovery implements OnInit {
 
   private async processToken(token: string, email: string) {
     this.loading = true;
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Request timed out. Please check your connection and try again.')), 15000),
+    );
     try {
-      const { error } = await this.supabase.client.auth.verifyOtp({
-        email,
-        token,
-        type: 'recovery',
-      });
+      const { error } = (await Promise.race([
+        this.supabase.client.auth.verifyOtp({ email, token, type: 'recovery' }),
+        timeout,
+      ])) as Awaited<ReturnType<typeof this.supabase.client.auth.verifyOtp>>;
       if (error) {
         this.error = error.message;
       } else {
