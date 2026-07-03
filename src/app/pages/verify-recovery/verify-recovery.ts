@@ -147,20 +147,9 @@ export class VerifyRecovery implements OnInit {
     this.error = '';
 
     try {
-      const response = await fetch(`${this.supabase.url}/auth/v1/user`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.recoveryAccessToken}`,
-          'apikey': this.supabase.key,
-        },
-        body: JSON.stringify({ password }),
-      });
-
-      if (!response.ok) {
-        const text = await response.text();
-        console.error('Supabase error response:', response.status, text);
-        this.error = `Error ${response.status}: ${text}`;
+      const { error } = await this.supabase.client.auth.updateUser({ password });
+      if (error) {
+        this.error = `Password update failed: ${error.message}`;
       } else {
         this.message = 'Password updated successfully! You can now sign in with your new password.';
       }
