@@ -74,17 +74,22 @@ export class VerifyRecovery implements OnInit {
 
   private async processToken(token: string, email: string) {
     this.loading = true;
-    const { error } = await this.supabase.client.auth.verifyOtp({
-      email,
-      token,
-      type: 'recovery',
-    });
-    this.loading = false;
-    if (error) {
-      this.error = error.message;
-    } else {
-      this.sessionSet = true;
-      window.history.replaceState({}, '', '/verify-recovery');
+    try {
+      const { error } = await this.supabase.client.auth.verifyOtp({
+        email,
+        token,
+        type: 'recovery',
+      });
+      if (error) {
+        this.error = error.message;
+      } else {
+        this.sessionSet = true;
+        window.history.replaceState({}, '', '/verify-recovery');
+      }
+    } catch (e) {
+      this.error = e instanceof Error ? e.message : 'An unexpected error occurred.';
+    } finally {
+      this.loading = false;
     }
   }
 
