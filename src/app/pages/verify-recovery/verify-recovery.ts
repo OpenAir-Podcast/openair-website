@@ -40,9 +40,25 @@ export class VerifyRecovery implements OnInit {
     }
 
     const queryToken = queryParams.get('token');
+    const queryTokenHash = queryParams.get('token_hash');
     const queryEmail = queryParams.get('email');
     if (queryToken && queryEmail) {
       this.processToken(queryToken, queryEmail);
+      return;
+    }
+    if (queryTokenHash && queryEmail) {
+      this.loading = true;
+      this.supabase.client.auth
+        .verifyOtp({ email: queryEmail, token_hash: queryTokenHash, type: 'recovery' })
+        .then(({ error }) => {
+          this.loading = false;
+          if (error) {
+            this.error = error.message;
+          } else {
+            this.sessionSet = true;
+            window.history.replaceState({}, '', '/verify-recovery');
+          }
+        });
       return;
     }
 
