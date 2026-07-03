@@ -48,18 +48,10 @@ export class VerifyRecovery implements OnInit {
     const queryAccessToken = queryParams.get('access_token');
     const queryType = queryParams.get('type');
     if (queryType === 'recovery' && queryAccessToken) {
-      this.sessionSet = true;
-      this.supabase.client.auth
-        .setSession({
-          access_token: queryAccessToken,
-          refresh_token: queryParams.get('refresh_token') || queryAccessToken,
-        })
-        .then(({ error }) => {
-          if (error) {
-            this.sessionSet = false;
-            this.error = 'Invalid or expired recovery link. Please request a new one.';
-          }
-        });
+      this.setRecoverySession(
+        queryAccessToken,
+        queryParams.get('refresh_token') || queryAccessToken,
+      );
       return;
     }
 
@@ -85,19 +77,35 @@ export class VerifyRecovery implements OnInit {
       return;
     }
 
+    this.setRecoverySession(accessToken, refreshToken || accessToken);
+  }
+
+  private setRecoverySession(accessToken: string, refreshToken: string) {
     this.sessionSet = true;
-    this.supabase.client.auth
-      .setSession({
+    this.loading = true;
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Request timed out')), 10000),
+    );
+    Promise.race([
+      this.supabase.client.auth.setSession({
         access_token: accessToken,
-        refresh_token: refreshToken || accessToken,
-      })
-      .then(({ error }) => {
+        refresh_token: refreshToken,
+      }),
+      timeout,
+    ])
+      .then(({ error }: any) => {
+        this.loading = false;
         if (error) {
           this.sessionSet = false;
           this.error = 'Invalid or expired recovery link. Please request a new one.';
         } else {
           window.location.hash = '';
         }
+      })
+      .catch(() => {
+        this.loading = false;
+        this.sessionSet = false;
+        this.error = 'Request timed out. Please try the recovery link again.';
       });
   }
 
