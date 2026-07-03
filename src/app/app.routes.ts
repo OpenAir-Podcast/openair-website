@@ -6,6 +6,7 @@ import { Blog } from './pages/blog/blog';
 import { Contribute } from './pages/contribute/contribute';
 import { Documentation } from './pages/documentation/documentation';
 import { Privacy } from './pages/privacy/privacy';
+import { VerifyRecovery } from './pages/verify-recovery/verify-recovery';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -15,5 +16,6 @@ export const routes: Routes = [
   { path: 'contribute', component: Contribute },
   { path: 'documentation', component: Documentation },
   { path: 'privacy', component: Privacy },
+  { path: 'verify-recovery', component: VerifyRecovery },
   { path: '**', redirectTo: '' }
 ];
