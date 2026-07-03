@@ -19,6 +19,7 @@ export class VerifyRecovery implements OnInit {
   error = '';
   message = '';
   sessionSet = false;
+  private recoveryAccessToken = '';
   passwordForm = this.fb.nonNullable.group({
     password: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', Validators.required],
@@ -81,6 +82,7 @@ export class VerifyRecovery implements OnInit {
   }
 
   private setRecoverySession(accessToken: string, refreshToken: string) {
+    this.recoveryAccessToken = accessToken;
     this.sessionSet = true;
     this.loading = true;
     const timeout = new Promise<never>((_, reject) =>
@@ -144,13 +146,30 @@ export class VerifyRecovery implements OnInit {
     this.loading = true;
     this.error = '';
 
-    const { error } = await this.supabase.client.auth.updateUser({ password });
-    this.loading = false;
+    try {
+      const supabaseUrl = 'https://cicwndrzbcxciavwgjzr.supabase.co';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpY3duZHJ6YmN4Y2lhdndnanpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxMjc2NzIsImV4cCI6MjA3MjcwMzY3Mn0.8W1G4ybz8BGjMG2kwm_XexcLSTNx1vRWLTTNjrAdWkg';
 
-    if (error) {
-      this.error = error.message;
-    } else {
-      this.message = 'Password updated successfully! You can now sign in with your new password.';
+      const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.recoveryAccessToken}`,
+          'apikey': supabaseKey,
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      if (!response.ok) {
+        const body = await response.json();
+        this.error = body?.msg || body?.message || `Error ${response.status}`;
+      } else {
+        this.message = 'Password updated successfully! You can now sign in with your new password.';
+      }
+    } catch (e) {
+      this.error = e instanceof Error ? e.message : 'An unexpected error occurred.';
+    } finally {
+      this.loading = false;
     }
   }
 }
