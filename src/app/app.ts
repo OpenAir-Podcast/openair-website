@@ -34,7 +34,11 @@ export class App implements OnInit {
         refresh_token: refreshToken || accessToken,
       })
       .then(({ error }) => {
-        if (!error) {
+        if (error) {
+          this.router.navigate(['/verify-recovery'], {
+            queryParams: { error: error.message },
+          });
+        } else {
           this.router.navigate(['/verify-recovery']);
         }
       });

@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { SupabaseService } from '../../services/supabase.service';
 
 @Component({
@@ -13,6 +13,7 @@ import { SupabaseService } from '../../services/supabase.service';
 export class VerifyRecovery implements OnInit {
   private fb = inject(FormBuilder);
   private supabase = inject(SupabaseService);
+  private route = inject(ActivatedRoute);
 
   loading = false;
   error = '';
@@ -30,8 +31,15 @@ export class VerifyRecovery implements OnInit {
       return;
     }
 
-    const queryToken = new URLSearchParams(window.location.search).get('token');
-    const queryEmail = new URLSearchParams(window.location.search).get('email');
+    const queryParams = new URLSearchParams(window.location.search);
+    const errorParam = queryParams.get('error');
+    if (errorParam) {
+      this.error = errorParam;
+      return;
+    }
+
+    const queryToken = queryParams.get('token');
+    const queryEmail = queryParams.get('email');
     if (queryToken && queryEmail) {
       this.processToken(queryToken, queryEmail);
       return;
