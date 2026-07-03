@@ -45,6 +45,24 @@ export class VerifyRecovery implements OnInit {
       return;
     }
 
+    const queryAccessToken = queryParams.get('access_token');
+    const queryType = queryParams.get('type');
+    if (queryType === 'recovery' && queryAccessToken) {
+      this.sessionSet = true;
+      this.supabase.client.auth
+        .setSession({
+          access_token: queryAccessToken,
+          refresh_token: queryParams.get('refresh_token') || queryAccessToken,
+        })
+        .then(({ error }) => {
+          if (error) {
+            this.sessionSet = false;
+            this.error = 'Invalid or expired recovery link. Please request a new one.';
+          }
+        });
+      return;
+    }
+
     this.loading = true;
     this.supabase.client.auth.getSession().then(({ data: { session } }) => {
       this.loading = false;

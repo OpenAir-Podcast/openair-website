@@ -34,7 +34,13 @@ export class App implements OnInit {
     }
 
     if (type === 'recovery' && accessToken) {
-      this.router.navigate(['/verify-recovery']);
+      this.router.navigate(['/verify-recovery'], {
+        queryParams: {
+          access_token: accessToken,
+          refresh_token: params.get('refresh_token') || accessToken,
+          type: 'recovery',
+        },
+      });
     }
   }
 }
