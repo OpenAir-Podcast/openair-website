@@ -7,6 +7,8 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
   private _client: SupabaseClient;
+  readonly url = supabaseUrl;
+  readonly key = supabaseKey;
 
   constructor() {
     this._client = createClient(supabaseUrl, supabaseKey);

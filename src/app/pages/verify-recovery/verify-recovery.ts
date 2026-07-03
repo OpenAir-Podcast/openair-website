@@ -147,22 +147,20 @@ export class VerifyRecovery implements OnInit {
     this.error = '';
 
     try {
-      const supabaseUrl = 'https://cicwndrzbcxciavwgjzr.supabase.co';
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpY3duZHJ6YmN4Y2lhdndnanpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxMjc2NzIsImV4cCI6MjA3MjcwMzY3Mn0.8W1G4ybz8BGjMG2kwm_XexcLSTNx1vRWLTTNjrAdWkg';
-
-      const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
+      const response = await fetch(`${this.supabase.url}/auth/v1/user`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.recoveryAccessToken}`,
-          'apikey': supabaseKey,
+          'apikey': this.supabase.key,
         },
         body: JSON.stringify({ password }),
       });
 
       if (!response.ok) {
-        const body = await response.json();
-        this.error = body?.msg || body?.message || `Error ${response.status}`;
+        const text = await response.text();
+        console.error('Supabase error response:', response.status, text);
+        this.error = `Error ${response.status}: ${text}`;
       } else {
         this.message = 'Password updated successfully! You can now sign in with your new password.';
       }
